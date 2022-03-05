@@ -8,3 +8,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "voda_android"
 include ':app'
+include ':datalayer'
+include ':datalayer:remote'
