@@ -1,4 +1,4 @@
-package com.example.voda_android.ui
+package com.example.voda_android.ui.main
 
 import androidx.lifecycle.viewModelScope
 import com.example.domain.entity.DataResult
