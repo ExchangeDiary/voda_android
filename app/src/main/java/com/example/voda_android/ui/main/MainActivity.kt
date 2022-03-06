@@ -1,4 +1,4 @@
-package com.example.voda_android.ui
+package com.example.voda_android.ui.main
 
 import android.os.Bundle
 import androidx.activity.viewModels
