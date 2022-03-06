@@ -54,4 +54,13 @@ dependencies {
     // hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    // viewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1" // viewModelScope
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1" // lifeCycleScope
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1" // liveData
+
+    implementation 'androidx.activity:activity-ktx:1.4.0' // by viewModels
+    implementation 'androidx.fragment:fragment-ktx:1.4.1' // by viewModels
+
 }
