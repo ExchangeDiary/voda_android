@@ -5,6 +5,7 @@
       <module name="voda_android.app" target="11" />
       <module name="voda_android.datalayer" target="11" />
       <module name="voda_android.datalayer.remote" target="11" />
+      <module name="voda_android.datastore" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
