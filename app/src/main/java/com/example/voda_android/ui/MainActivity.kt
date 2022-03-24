@@ -22,12 +22,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private fun setClicks() {
         binding.button.setOnClickListener {
-            viewModel.getTest()
+            viewModel.getStringPreferences()
+        }
+
+        binding.editButton.setOnClickListener {
+            viewModel.setStringPreferences(binding.editText.text.toString())
         }
     }
 
     private fun setObservers() {
-        viewModel.testText.asLiveData().observe(this) {
+        viewModel.stringPreference.asLiveData().observe(this) {
             binding.textView.text = it
         }
     }
