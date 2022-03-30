@@ -21,6 +21,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun setClicks() {
+        binding.apiButton.setOnClickListener {
+            viewModel.getTest()
+        }
+
         binding.button.setOnClickListener {
             viewModel.getStringPreferences()
         }

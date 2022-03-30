@@ -12,6 +12,15 @@
         android:layout_height="match_parent"
         tools:context=".ui.MainActivity">
 
+        <Button
+            android:id="@+id/apiButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="apiButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
@@ -35,7 +44,7 @@
             android:id="@+id/editText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
+            android:text=""
             app:layout_constraintTop_toBottomOf="@id/button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
