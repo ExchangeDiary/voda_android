@@ -68,6 +68,7 @@ class TokenInterceptor @Inject constructor() : Interceptor {
         val request = chain.request().newBuilder().addHeader("Authorization", accessToken).build()
         val response: Response = chain.proceed(request)
 
+        // TODO sangeun: 토큰 만료 여부에 따라 갱신된 토큰 가져오기
         // 2. 위 Response에서 응답 json을 꺼내 서버 응답 코드가 토큰 만료 에러 코드인지 확인한다.
         if (!response.isSuccessful) { // 응답 토큰이 만료되었는지 체
             // 4. MobileTokenRepository 로부터 갱신된 토큰(Refreshed Token)을 가져온다.
