@@ -48,18 +48,18 @@ class MainViewModel @Inject constructor(
 //            }
 
             // 2. 한번만 String 형태로 받는 경우.
-            _stringPreference.value = getStringPreferencesOnceUseCase(KEY) ?: ""
+            _stringPreference.value = getStringPreferencesOnceUseCase(ACCESS_TOKEN_KEY) ?: ""
         }
     }
 
     fun setStringPreferences(str: String) {
         viewModelScope.launch {
             // 저장하는 방법은 한개로 동일.
-            setStringPreferencesUseCase(KEY, str)
+            setStringPreferencesUseCase(ACCESS_TOKEN_KEY, str)
         }
     }
 
     companion object {
-        const val KEY = "KEY"
+        const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN"
     }
 }
