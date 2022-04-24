@@ -70,6 +70,9 @@ dependencies {
     // kakao SDK
     implementation "com.kakao.sdk:v2-user:2.9.0" // 카카오 로그인
 
+    // google SDK
+    implementation 'com.google.android.gms:play-services-auth:20.1.0' // 구글 로그인
+
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

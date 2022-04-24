@@ -1,10 +1,20 @@
 package com.example.voda_android.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.voda_android.R
 import com.example.voda_android.databinding.ActivityLoginBinding
 import com.example.voda_android.ui.base.BaseActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.KakaoSdkError
@@ -13,6 +23,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var requestGoogleLogin: ActivityResultLauncher<Intent>
+
     private val kakaoLoginCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
             Log.e(TAG, "로그인 실패", error)
@@ -26,11 +39,37 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        setGoogleLogin()
         setClicks()
+    }
+
+    private fun setGoogleLogin() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        requestGoogleLogin = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { activityResult ->
+            val task = GoogleSignIn.getSignedInAccountFromIntent(activityResult.data)
+            handleGoogleLogin(task)
+        }
+    }
+
+    private fun handleGoogleLogin(task: Task<GoogleSignInAccount>) {
+        try {
+            val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
+            getGoogleUser(account)
+        } catch (e: ApiException) {
+            Log.w(TAG, "signInResult:failed code=" + e.statusCode)
+        }
     }
 
     private fun setClicks() {
         binding.goggle.setOnClickListener {
+            val signInIntent = googleSignInClient.signInIntent
+            requestGoogleLogin.launch(signInIntent)
         }
 
         binding.kakao.setOnClickListener {
@@ -88,6 +127,18 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         }
     }
 
+    private fun getGoogleUser(user: GoogleSignInAccount) {
+        // 사용자 정보 요청 (기본)
+        Log.d(
+            TAG,
+            "사용자 정보 요청 성공" +
+                    "\n회원번호: ${user.id}" +
+                    "\n이메일: ${user.email}" +
+                    "\n닉네임: ${user.displayName}" +
+                    "\n프로필사진: ${user.photoUrl}"
+        )
+    }
+
     fun kakaoLogOut() { // 로그아웃
         UserApiClient.instance.logout { error ->
             if (error != null) Log.e(TAG, "로그아웃 실패. 그러 SDK에서 토큰 삭제됨", error)
@@ -95,11 +146,25 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         }
     }
 
+    fun googleLogOut() {
+        googleSignInClient.signOut()
+            .addOnCompleteListener(this, OnCompleteListener<Void?> {
+                // ...
+            })
+    }
+
     fun kakaoRevoke() { // 탈퇴
         UserApiClient.instance.unlink { error ->
             if (error != null) Log.e(TAG, "연결 끊기 실패", error)
             else Log.i(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
         }
+    }
+
+    fun googleRevoke() {
+        googleSignInClient.revokeAccess()
+            .addOnCompleteListener(this, OnCompleteListener<Void?> {
+                // ...
+            })
     }
 
     companion object {
